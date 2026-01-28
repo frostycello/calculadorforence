@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Ingreso de Datos{% endblock %}
+
+{% block content %}
+    <h2>Ingrese los datos de las tomas</h2>
+    <form method="POST">
+        <label for="Ta">Temperatura ambiente (Ta) en °C:</label>
+        <input type="number" step="0.1" id="Ta" name="Ta" required placeholder="ej. 25">
+
+        <label for="hora1">Hora de la primera toma (HH:MM):</label>
+        <input type="text" id="hora1" name="hora1" required placeholder="ej. 06:00">
+
+        <label for="T1">Temperatura primera toma (°C):</label>
+        <input type="number" step="0.1" id="T1" name="T1" required placeholder="ej. 32">
+
+        <label for="hora2">Hora de la segunda toma (HH:MM):</label>
+        <input type="text" id="hora2" name="hora2" required placeholder="ej. 06:30">
+
+        <label for="T2">Temperatura segunda toma (°C):</label>
+        <input type="number" step="0.1" id="T2" name="T2" required placeholder="ej. 29">
+
+        <button type="submit">Calcular hora de muerte</button>
+    </form>
+{% endblock %}
