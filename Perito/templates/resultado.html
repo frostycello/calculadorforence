@@ -3,12 +3,175 @@
 {% block title %}Resultado{% endblock %}
 
 {% block content %}
-    <h2>Resultado de la hora de muerte</h2>
-    {% if 'Error' in resultado %}
-        <p style="color: red; font-weight: bold;">{{ resultado }}</p>
-    {% else %}
-        <p style="color: green; font-weight: bold;">{{ resultado }}</p>
-    {% endif %}
-    <a href="/" class="volver">← Volver a ingresar datos</a>
+<style>
+  .card {
+    max-width: 860px;
+    margin: 24px auto;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
 
+  .card-header {
+    padding: 22px 26px;
+    background: linear-gradient(135deg, rgba(102,126,234,0.95), rgba(118,75,162,0.95));
+    color: #fff;
+  }
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: 0.2px;
+  }
+
+  .card-header p {
+    margin: 6px 0 0;
+    opacity: 0.92;
+    font-size: 0.95rem;
+  }
+
+  .card-body {
+    padding: 26px;
+  }
+
+  .alert {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    font-weight: 650;
+    line-height: 1.4;
+  }
+
+  .alert .icon {
+    font-size: 1.2rem;
+    margin-top: 1px;
+  }
+
+  .alert-success {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+  }
+
+  .alert-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #7f1d1d;
+  }
+
+  .result-text {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  @media (min-width: 740px) {
+    .actions {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 750;
+    font-size: 16px;
+    text-decoration: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 12px 22px rgba(118,75,162,0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 26px rgba(118,75,162,0.30);
+  }
+
+  .btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .btn-secondary:hover {
+    opacity: 0.9;
+  }
+
+  .note {
+    margin-top: 14px;
+    background: #f8fafc;
+    border: 1px dashed #d6dae3;
+    padding: 12px 14px;
+    border-radius: 12px;
+    color: #4b5563;
+    font-size: 0.92rem;
+  }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.95em;
+  }
+</style>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Resultado</h2>
+    <p>Estimación de la hora de muerte basada en las tomas ingresadas.</p>
+  </div>
+
+  <div class="card-body">
+    {% if 'Error' in resultado %}
+      <div class="alert alert-error">
+        <span class="icon">⛔</span>
+        <div>
+          <div class="result-text">Ocurrió un problema</div>
+          <div>{{ resultado }}</div>
+        </div>
+      </div>
+    {% else %}
+      <div class="alert alert-success">
+        <span class="icon">✅</span>
+        <div>
+          <div class="result-text">Cálculo completado</div>
+          <div>{{ resultado }}</div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="actions">
+      <a href="/" class="btn btn-primary"><span>↩️</span> Volver a ingresar datos</a>
+
+      <!-- Botón opcional extra si quieres llevar a otra ruta -->
+      <!-- <a href="/ingreso" class="btn btn-secondary"><span>➕</span> Nueva captura</a> -->
+    </div>
+
+    <div class="note">
+      <strong>Tip:</strong> Si quieres mostrar el resultado con formato más bonito (por ejemplo, fecha/hora),
+      puedes enviarlo ya formateado desde Flask antes de renderizar.
+    </div>
+  </div>
+</div>
 {% endblock %}
