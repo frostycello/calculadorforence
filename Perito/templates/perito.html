@@ -3,25 +3,274 @@
 {% block title %}Ingreso de Datos{% endblock %}
 
 {% block content %}
-    <h2>Ingrese los datos</h2>
-    <form method="POST">
-        <label for="Ta">Temperatura ambiente (Ta) en °C:</label>
-        <input type="number" step="0.1" id="Ta" name="Ta" required placeholder="ej. 25">
+<style>
+  .card {
+    max-width: 860px;
+    margin: 24px auto;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
 
-        <label for="hora1">Hora de la primera toma (HH:MM):</label>
-        <input type="text" id="hora1" name="hora1" required placeholder="ej. 06:00">
+  .card-header {
+    padding: 22px 26px;
+    background: linear-gradient(135deg, rgba(102,126,234,0.95), rgba(118,75,162,0.95));
+    color: #fff;
+  }
 
-        <label for="T1">Primera Temperatura de toma (°C):</label>
-        <input type="number" step="0.1" id="T1" name="T1" required placeholder="ej. 32">
+  .card-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: 0.2px;
+  }
 
-        <label for="hora2">Hora de la segunda toma (HH:MM):</label>
-        <input type="text" id="hora2" name="hora2" required placeholder="ej. 06:30">
+  .card-header p {
+    margin: 6px 0 0;
+    opacity: 0.92;
+    font-size: 0.95rem;
+  }
 
-        <label for="T2">Segunda Temperatura de toma (°C):</label>
-        <input type="number" step="0.1" id="T2" name="T2" required placeholder="ej. 29">
+  .card-body {
+    padding: 26px;
+  }
 
-        <button type="submit">Calcular Hora de muerte</button>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  @media (min-width: 740px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-weight: 650;
+    color: #3a3a3a;
+    font-size: 0.95rem;
+  }
+
+  .hint {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: -2px;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap .icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.75;
+    font-size: 1.05rem;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 12px 12px 12px 38px;
+    font-size: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .field input:focus {
+    outline: none;
+    border-color: rgba(102,126,234,0.9);
+    box-shadow: 0 0 0 4px rgba(102,126,234,0.18);
+  }
+
+  .divider {
+    margin: 18px 0 10px;
+    height: 1px;
+    background: #eceff3;
+    border: none;
+  }
+
+  .section-title {
+    font-weight: 750;
+    color: #374151;
+    margin: 0 0 10px;
+    font-size: 0.95rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  @media (min-width: 740px) {
+    .actions {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 750;
+    font-size: 16px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 12px 22px rgba(118,75,162,0.25);
+    width: 100%;
+  }
+
+  @media (min-width: 740px) {
+    .btn-primary {
+      width: auto;
+      min-width: 260px;
+    }
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 26px rgba(118,75,162,0.30);
+  }
+
+  .btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    width: 100%;
+  }
+
+  @media (min-width: 740px) {
+    .btn-secondary {
+      width: auto;
+    }
+  }
+
+  .btn-secondary:hover {
+    opacity: 0.9;
+  }
+
+  .note {
+    margin-top: 14px;
+    background: #f8fafc;
+    border: 1px dashed #d6dae3;
+    padding: 12px 14px;
+    border-radius: 12px;
+    color: #4b5563;
+    font-size: 0.92rem;
+  }
+
+  .note strong {
+    color: #374151;
+  }
+</style>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Ingreso de datos</h2>
+    <p>Captura temperatura ambiente y dos tomas con hora para estimar la hora de muerte.</p>
+  </div>
+
+  <div class="card-body">
+    <form method="POST" autocomplete="off">
+      <p class="section-title">Condiciones del entorno</p>
+      <div class="grid">
+        <div class="field">
+          <label for="Ta">Temperatura ambiente (Ta) en °C</label>
+          <div class="input-wrap">
+            <span class="icon">🌡️</span>
+            <input type="number" step="0.1" id="Ta" name="Ta" required placeholder="Ej. 25">
+          </div>
+          <div class="hint">Usa decimales si aplica (ej. 25.5).</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <p class="section-title">Primera toma</p>
+      <div class="grid">
+        <div class="field">
+          <label for="hora1">Hora (HH:MM)</label>
+          <div class="input-wrap">
+            <span class="icon">🕒</span>
+            <input type="time" id="hora1" name="hora1" required>
+          </div>
+          <div class="hint">Formato 24 horas.</div>
+        </div>
+
+        <div class="field">
+          <label for="T1">Temperatura (°C)</label>
+          <div class="input-wrap">
+            <span class="icon">🌡️</span>
+            <input type="number" step="0.1" id="T1" name="T1" required placeholder="Ej. 32">
+          </div>
+          <div class="hint">Temperatura de la primera toma.</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <p class="section-title">Segunda toma</p>
+      <div class="grid">
+        <div class="field">
+          <label for="hora2">Hora (HH:MM)</label>
+          <div class="input-wrap">
+            <span class="icon">🕒</span>
+            <input type="time" id="hora2" name="hora2" required>
+          </div>
+          <div class="hint">Formato 24 horas.</div>
+        </div>
+
+        <div class="field">
+          <label for="T2">Temperatura (°C)</label>
+          <div class="input-wrap">
+            <span class="icon">🌡️</span>
+            <input type="number" step="0.1" id="T2" name="T2" required placeholder="Ej. 29">
+          </div>
+          <div class="hint">Temperatura de la segunda toma.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">
+          <span>🧮</span> Calcular hora de muerte
+        </button>
+
+        <!-- Si tienes ruta para volver, cámbiala aquí -->
+        <a class="btn btn-secondary" href="/">
+          <span>↩️</span> Volver
+        </a>
+      </div>
+
+      <div class="note">
+        <strong>Tip:</strong> Si tus horas vienen de campo de texto, ahora se validan mejor con <code>type="time"</code>.
+      </div>
     </form>
-
+  </div>
+</div>
 {% endblock %}
+
 
