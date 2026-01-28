@@ -3,11 +3,12 @@
 {% block title %}Resultado{% endblock %}
 
 {% block content %}
-    <h2>Resultado del cálculo</h2>
+    <h2>Resultado de la hora de muerte</h2>
     {% if 'Error' in resultado %}
         <p style="color: red; font-weight: bold;">{{ resultado }}</p>
     {% else %}
         <p style="color: green; font-weight: bold;">{{ resultado }}</p>
     {% endif %}
     <a href="/" class="volver">← Volver a ingresar datos</a>
+
 {% endblock %}
